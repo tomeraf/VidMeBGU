@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Generate Colored Icons</title>
+</head>
+<body>
+    <h1>Generating colored icons...</h1>
+    <div id="status">Processing...</div>
+    <div id="canvases"></div>
+
+    <script>
+        const svgBase = `<svg width="128" height="128" xmlns="http://www.w3.org/2000/svg">
+  <rect width="128" height="128" rx="20" fill="COLOR"/>
+  <ellipse cx="64" cy="55" rx="28" ry="32" fill="#f5d5b8"/>
+  <ellipse cx="64" cy="30" rx="24" ry="12" fill="#f5d5b8"/>
+  <g fill="white">
+    <ellipse cx="38" cy="45" rx="8" ry="14" transform="rotate(-25 38 45)"/>
+    <ellipse cx="33" cy="52" rx="6" ry="12" transform="rotate(-35 33 52)"/>
+    <ellipse cx="36" cy="60" rx="5" ry="10" transform="rotate(-20 36 60)"/>
+    <ellipse cx="90" cy="45" rx="8" ry="14" transform="rotate(25 90 45)"/>
+    <ellipse cx="95" cy="52" rx="6" ry="12" transform="rotate(35 95 52)"/>
+    <ellipse cx="92" cy="60" rx="5" ry="10" transform="rotate(20 92 60)"/>
+    <ellipse cx="40" cy="68" rx="7" ry="8"/>
+    <ellipse cx="88" cy="68" rx="7" ry="8"/>
+  </g>
+  <rect x="50" y="48" width="12" height="3" rx="1.5" fill="#333"/>
+  <rect x="66" y="48" width="12" height="3" rx="1.5" fill="#333"/>
+  <circle cx="56" cy="56" r="2.5" fill="#333"/>
+  <circle cx="72" cy="56" r="2.5" fill="#333"/>
+  <path d="M 64 58 L 64 68 L 66 69" stroke="#c4956a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <rect x="42" y="80" width="44" height="20" fill="#555" rx="3"/>
+  <g transform="translate(64, 110)">
+    <circle r="12" fill="#4CAF50" opacity="0.95"/>
+    <polygon points="-3,-4 -3,4 4,0" fill="white"/>
+    <line x1="-3" y1="6" x2="4" y2="6" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+  </g>
+</svg>`;
+
+        const colors = [
+            { name: 'frame1', color: '#0066cc' },
+            { name: 'frame2', color: '#4CAF50' },
+            { name: 'frame3', color: '#ff9800' },
+            { name: 'frame4', color: '#f44336' },
+            { name: 'frame5', color: '#9c27b0' }
+        ];
+
+        const sizes = [128, 48, 16];
+        const canvasContainer = document.getElementById('canvases');
+
+        colors.forEach(({ name, color }) => {
+            sizes.forEach(size => {
+                const svg = svgBase.replace('COLOR', color).replace('width="128"', `width="${size}"`).replace('height="128"', `height="${size}"`);
+
+                const canvas = document.createElement('canvas');
+                canvas.width = size;
+                canvas.height = size;
+                canvas.id = `${name}_${size}`;
+
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+                const blob = new Blob([svg], { type: 'image/svg+xml' });
+                const url = URL.createObjectURL(blob);
+
+                img.onload = function() {
+                    ctx.drawImage(img, 0, 0, size, size);
+                    URL.revokeObjectURL(url);
+
+                    // Add download button
+                    const btn = document.createElement('button');
+                    btn.textContent = `Download ${name}_${size}.png`;
+                    btn.onclick = () => {
+                        canvas.toBlob(blob => {
+                            const a = document.createElement('a');
+                            a.href = URL.createObjectURL(blob);
+                            a.download = `${name}_${size}.png`;
+                            a.click();
+                        });
+                    };
+
+                    const div = document.createElement('div');
+                    div.style.margin = '10px';
+                    div.appendChild(canvas);
+                    div.appendChild(btn);
+                    canvasContainer.appendChild(div);
+                };
+
+                img.src = url;
+            });
+        });
+
+        setTimeout(() => {
+            document.getElementById('status').innerHTML = '<strong>✓ Done! Click buttons below to download each icon</strong>';
+        }, 2000);
+    </script>
+</body>
+</html>

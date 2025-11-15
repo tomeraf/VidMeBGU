@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Generate Animation Icons</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .icon-preview { display: inline-block; margin: 10px; text-align: center; }
+        canvas { border: 1px solid #ddd; }
+        button { margin: 5px; padding: 10px 20px; background: #4CAF50; color: white; border: none; cursor: pointer; border-radius: 4px; }
+        button:hover { background: #45a049; }
+        .download-all { background: #0066cc; font-size: 16px; padding: 15px 30px; }
+        .download-all:hover { background: #0052a3; }
+    </style>
+</head>
+<body>
+    <h1>Generate Animated Icons for Extension</h1>
+    <p>Download all icons and place them in the <code>icons/</code> folder</p>
+
+    <button class="download-all" onclick="downloadAll()">📦 Download All Icons</button>
+
+    <h2>Preview & Download</h2>
+    <div id="icons"></div>
+
+    <script>
+        const svgTemplate = `<svg width="SIZE" height="SIZE" xmlns="http://www.w3.org/2000/svg">
+  <rect width="SIZE" height="SIZE" rx="RADIUS" fill="COLOR"/>
+  <ellipse cx="CX" cy="CY1" rx="RX1" ry="RY1" fill="#f5d5b8"/>
+  <ellipse cx="CX" cy="CY2" rx="RX2" ry="RY2" fill="#f5d5b8"/>
+  <g fill="white">
+    <ellipse cx="EX1" cy="EY1" rx="ERX1" ry="ERY1" transform="rotate(-25 EX1 EY1)"/>
+    <ellipse cx="EX2" cy="EY2" rx="ERX2" ry="ERY2" transform="rotate(-35 EX2 EY2)"/>
+    <ellipse cx="EX3" cy="EY3" rx="ERX3" ry="ERY3" transform="rotate(-20 EX3 EY3)"/>
+    <ellipse cx="EX4" cy="EY4" rx="ERX4" ry="ERY4" transform="rotate(25 EX4 EY4)"/>
+    <ellipse cx="EX5" cy="EY5" rx="ERX5" ry="ERY5" transform="rotate(35 EX5 EY5)"/>
+    <ellipse cx="EX6" cy="EY6" rx="ERX6" ry="ERY6" transform="rotate(20 EX6 EY6)"/>
+    <ellipse cx="EX7" cy="EY7" rx="ERX7" ry="ERY7"/>
+    <ellipse cx="EX8" cy="EY8" rx="ERX8" ry="ERY8"/>
+  </g>
+  <rect x="RX" y="RY" width="RW" height="RH" rx="RRX" fill="#333"/>
+  <rect x="RX2" y="RY" width="RW" height="RH" rx="RRX" fill="#333"/>
+  <circle cx="CCX1" cy="CCY" r="CR" fill="#333"/>
+  <circle cx="CCX2" cy="CCY" r="CR" fill="#333"/>
+  <path d="M PX1 PY1 L PX2 PY2 L PX3 PY3" stroke="#c4956a" stroke-width="PSW" fill="none" stroke-linecap="round"/>
+  <rect x="SRX" y="SRY" width="SRW" height="SRH" fill="#555" rx="SRR"/>
+  <g transform="translate(GX, GY)">
+    <circle r="GR" fill="#4CAF50" opacity="0.95"/>
+    <polygon points="-3,-4 -3,4 4,0" fill="white"/>
+    <line x1="-3" y1="6" x2="4" y2="6" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+  </g>
+</svg>`;
+
+        const colors = [
+            { name: 'blue', color: '#0066cc' },
+            { name: 'green', color: '#4CAF50' },
+            { name: 'orange', color: '#ff9800' },
+            { name: 'red', color: '#f44336' }
+        ];
+
+        const sizes = [16, 48, 128];
+
+        function scaleSVG(template, size) {
+            const scale = size / 128;
+            return template
+                .replace(/SIZE/g, size)
+                .replace(/RADIUS/g, Math.round(20 * scale))
+                .replace(/CX/g, Math.round(64 * scale))
+                .replace(/CY1/g, Math.round(55 * scale))
+                .replace(/RX1/g, Math.round(28 * scale))
+                .replace(/RY1/g, Math.round(32 * scale))
+                .replace(/CY2/g, Math.round(30 * scale))
+                .replace(/RX2/g, Math.round(24 * scale))
+                .replace(/RY2/g, Math.round(12 * scale))
+                .replace(/EX1/g, Math.round(38 * scale))
+                .replace(/EY1/g, Math.round(45 * scale))
+                .replace(/ERX1/g, Math.round(8 * scale))
+                .replace(/ERY1/g, Math.round(14 * scale))
+                .replace(/EX2/g, Math.round(33 * scale))
+                .replace(/EY2/g, Math.round(52 * scale))
+                .replace(/ERX2/g, Math.round(6 * scale))
+                .replace(/ERY2/g, Math.round(12 * scale))
+                .replace(/EX3/g, Math.round(36 * scale))
+                .replace(/EY3/g, Math.round(60 * scale))
+                .replace(/ERX3/g, Math.round(5 * scale))
+                .replace(/ERY3/g, Math.round(10 * scale))
+                .replace(/EX4/g, Math.round(90 * scale))
+                .replace(/EY4/g, Math.round(45 * scale))
+                .replace(/ERX4/g, Math.round(8 * scale))
+                .replace(/ERY4/g, Math.round(14 * scale))
+                .replace(/EX5/g, Math.round(95 * scale))
+                .replace(/EY5/g, Math.round(52 * scale))
+                .replace(/ERX5/g, Math.round(6 * scale))
+                .replace(/ERY5/g, Math.round(12 * scale))
+                .replace(/EX6/g, Math.round(92 * scale))
+                .replace(/EY6/g, Math.round(60 * scale))
+                .replace(/ERX6/g, Math.round(5 * scale))
+                .replace(/ERY6/g, Math.round(10 * scale))
+                .replace(/EX7/g, Math.round(40 * scale))
+                .replace(/EY7/g, Math.round(68 * scale))
+                .replace(/ERX7/g, Math.round(7 * scale))
+                .replace(/ERY7/g, Math.round(8 * scale))
+                .replace(/EX8/g, Math.round(88 * scale))
+                .replace(/EY8/g, Math.round(68 * scale))
+                .replace(/ERX8/g, Math.round(7 * scale))
+                .replace(/ERY8/g, Math.round(8 * scale))
+                .replace(/RX/g, Math.round(50 * scale))
+                .replace(/RY/g, Math.round(48 * scale))
+                .replace(/RW/g, Math.round(12 * scale))
+                .replace(/RH/g, Math.round(3 * scale))
+                .replace(/RRX/g, Math.round(1.5 * scale))
+                .replace(/RX2/g, Math.round(66 * scale))
+                .replace(/CCX1/g, Math.round(56 * scale))
+                .replace(/CCX2/g, Math.round(72 * scale))
+                .replace(/CCY/g, Math.round(56 * scale))
+                .replace(/CR/g, Math.round(2.5 * scale))
+                .replace(/PX1/g, Math.round(64 * scale))
+                .replace(/PY1/g, Math.round(58 * scale))
+                .replace(/PX2/g, Math.round(64 * scale))
+                .replace(/PY2/g, Math.round(68 * scale))
+                .replace(/PX3/g, Math.round(66 * scale))
+                .replace(/PY3/g, Math.round(69 * scale))
+                .replace(/PSW/g, (2.5 * scale).toFixed(1))
+                .replace(/SRX/g, Math.round(42 * scale))
+                .replace(/SRY/g, Math.round(80 * scale))
+                .replace(/SRW/g, Math.round(44 * scale))
+                .replace(/SRH/g, Math.round(20 * scale))
+                .replace(/SRR/g, Math.round(3 * scale))
+                .replace(/GX/g, Math.round(64 * scale))
+                .replace(/GY/g, Math.round(110 * scale))
+                .replace(/GR/g, Math.round(12 * scale));
+        }
+
+        const allCanvases = [];
+
+        colors.forEach(({ name, color }) => {
+            sizes.forEach(size => {
+                const svg = scaleSVG(svgTemplate, size).replace(/COLOR/g, color);
+
+                const canvas = document.createElement('canvas');
+                canvas.width = size;
+                canvas.height = size;
+
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+                const blob = new Blob([svg], { type: 'image/svg+xml' });
+                const url = URL.createObjectURL(blob);
+
+                img.onload = function() {
+                    ctx.drawImage(img, 0, 0, size, size);
+                    URL.revokeObjectURL(url);
+                };
+
+                img.src = url;
+
+                const filename = `icon${size}_${name}.png`;
+                allCanvases.push({ canvas, filename });
+
+                const container = document.createElement('div');
+                container.className = 'icon-preview';
+
+                const label = document.createElement('div');
+                label.textContent = filename;
+                label.style.marginBottom = '5px';
+                label.style.fontWeight = 'bold';
+
+                const btn = document.createElement('button');
+                btn.textContent = 'Download';
+                btn.onclick = () => downloadIcon(canvas, filename);
+
+                container.appendChild(label);
+                container.appendChild(canvas);
+                container.appendChild(document.createElement('br'));
+                container.appendChild(btn);
+
+                document.getElementById('icons').appendChild(container);
+            });
+        });
+
+        function downloadIcon(canvas, filename) {
+            canvas.toBlob(blob => {
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = filename;
+                a.click();
+            });
+        }
+
+        function downloadAll() {
+            alert('Will download all ' + allCanvases.length + ' icons. Click OK on each download prompt.');
+
+            allCanvases.forEach((item, index) => {
+                setTimeout(() => {
+                    downloadIcon(item.canvas, item.filename);
+                }, index * 300);
+            });
+        }
+    </script>
+</body>
+</html>

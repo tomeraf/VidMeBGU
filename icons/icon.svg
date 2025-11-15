@@ -1,0 +1,53 @@
+<svg width="128" height="128" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="128" height="128" rx="20" fill="#0066cc"/>
+
+  <!-- David Ben Gurion portrait -->
+  <!-- Head (bald on top) -->
+  <ellipse cx="64" cy="55" rx="28" ry="32" fill="#f5d5b8"/>
+
+  <!-- Bald head top -->
+  <ellipse cx="64" cy="30" rx="24" ry="12" fill="#f5d5b8"/>
+
+  <!-- ICONIC WILD WHITE HAIR - Left side sticking out -->
+  <g fill="white">
+    <!-- Left hair tuft 1 -->
+    <ellipse cx="38" cy="45" rx="8" ry="14" transform="rotate(-25 38 45)"/>
+    <!-- Left hair tuft 2 -->
+    <ellipse cx="33" cy="52" rx="6" ry="12" transform="rotate(-35 33 52)"/>
+    <!-- Left hair tuft 3 -->
+    <ellipse cx="36" cy="60" rx="5" ry="10" transform="rotate(-20 36 60)"/>
+
+    <!-- Right hair tuft 1 -->
+    <ellipse cx="90" cy="45" rx="8" ry="14" transform="rotate(25 90 45)"/>
+    <!-- Right hair tuft 2 -->
+    <ellipse cx="95" cy="52" rx="6" ry="12" transform="rotate(35 95 52)"/>
+    <!-- Right hair tuft 3 -->
+    <ellipse cx="92" cy="60" rx="5" ry="10" transform="rotate(20 92 60)"/>
+
+    <!-- Back hair (lower) -->
+    <ellipse cx="40" cy="68" rx="7" ry="8"/>
+    <ellipse cx="88" cy="68" rx="7" ry="8"/>
+  </g>
+
+  <!-- Eyebrows (thick) -->
+  <rect x="50" y="48" width="12" height="3" rx="1.5" fill="#333"/>
+  <rect x="66" y="48" width="12" height="3" rx="1.5" fill="#333"/>
+
+  <!-- Eyes -->
+  <circle cx="56" cy="56" r="2.5" fill="#333"/>
+  <circle cx="72" cy="56" r="2.5" fill="#333"/>
+
+  <!-- Nose (prominent) -->
+  <path d="M 64 58 L 64 68 L 66 69" stroke="#c4956a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Collar/shirt (simple) -->
+  <rect x="42" y="80" width="44" height="20" fill="#555" rx="3"/>
+
+  <!-- Video download symbol at bottom -->
+  <g transform="translate(64, 110)">
+    <circle r="12" fill="#4CAF50" opacity="0.95"/>
+    <polygon points="-3,-4 -3,4 4,0" fill="white"/>
+    <line x1="-3" y1="6" x2="4" y2="6" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+  </g>
+</svg>

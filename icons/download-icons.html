@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Extension Icons</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .icon-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #0066cc;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .icon-section h2 {
+            margin-top: 0;
+            color: #0066cc;
+        }
+        canvas {
+            border: 1px solid #ddd;
+            margin: 20px;
+            background: white;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .download-all {
+            background: #0066cc;
+            font-size: 18px;
+            padding: 15px 30px;
+        }
+        .download-all:hover {
+            background: #0052a3;
+        }
+        .instructions {
+            background: #fffbea;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 BGU Moodle Video Downloader Icons</h1>
+
+        <div class="instructions">
+            <strong>Instructions:</strong>
+            <ol>
+                <li>Click "Download All Icons" button below</li>
+                <li>Or download each icon individually</li>
+                <li>Save them in: <code>c:\projects\VidMeBGU\icons\</code></li>
+            </ol>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <button class="download-all" onclick="downloadAll()">📦 Download All Icons (ZIP)</button>
+        </div>
+
+        <div class="icon-section">
+            <h2>128x128 Icon</h2>
+            <canvas id="canvas128" width="128" height="128"></canvas>
+            <br>
+            <button onclick="downloadIcon(128, 'icon128.png')">Download icon128.png</button>
+        </div>
+
+        <div class="icon-section">
+            <h2>48x48 Icon</h2>
+            <canvas id="canvas48" width="48" height="48"></canvas>
+            <br>
+            <button onclick="downloadIcon(48, 'icon48.png')">Download icon48.png</button>
+        </div>
+
+        <div class="icon-section">
+            <h2>16x16 Icon</h2>
+            <canvas id="canvas16" width="16" height="16"></canvas>
+            <br>
+            <button onclick="downloadIcon(16, 'icon16.png')">Download icon16.png</button>
+        </div>
+    </div>
+
+    <script>
+        const svgContent = `<svg width="128" height="128" xmlns="http://www.w3.org/2000/svg">
+  <rect width="128" height="128" rx="20" fill="#0066cc"/>
+  <ellipse cx="64" cy="55" rx="28" ry="32" fill="#f5d5b8"/>
+  <ellipse cx="64" cy="30" rx="24" ry="12" fill="#f5d5b8"/>
+  <g fill="white">
+    <ellipse cx="38" cy="45" rx="8" ry="14" transform="rotate(-25 38 45)"/>
+    <ellipse cx="33" cy="52" rx="6" ry="12" transform="rotate(-35 33 52)"/>
+    <ellipse cx="36" cy="60" rx="5" ry="10" transform="rotate(-20 36 60)"/>
+    <ellipse cx="90" cy="45" rx="8" ry="14" transform="rotate(25 90 45)"/>
+    <ellipse cx="95" cy="52" rx="6" ry="12" transform="rotate(35 95 52)"/>
+    <ellipse cx="92" cy="60" rx="5" ry="10" transform="rotate(20 92 60)"/>
+    <ellipse cx="40" cy="68" rx="7" ry="8"/>
+    <ellipse cx="88" cy="68" rx="7" ry="8"/>
+  </g>
+  <rect x="50" y="48" width="12" height="3" rx="1.5" fill="#333"/>
+  <rect x="66" y="48" width="12" height="3" rx="1.5" fill="#333"/>
+  <circle cx="56" cy="56" r="2.5" fill="#333"/>
+  <circle cx="72" cy="56" r="2.5" fill="#333"/>
+  <path d="M 64 58 L 64 68 L 66 69" stroke="#c4956a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <rect x="42" y="80" width="44" height="20" fill="#555" rx="3"/>
+  <g transform="translate(64, 110)">
+    <circle r="12" fill="#4CAF50" opacity="0.95"/>
+    <polygon points="-3,-4 -3,4 4,0" fill="white"/>
+    <line x1="-3" y1="6" x2="4" y2="6" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+  </g>
+</svg>`;
+
+        function renderIcon(size) {
+            const canvas = document.getElementById(`canvas${size}`);
+            const ctx = canvas.getContext('2d');
+
+            const img = new Image();
+            const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+
+            img.onload = function() {
+                ctx.clearRect(0, 0, size, size);
+                ctx.drawImage(img, 0, 0, size, size);
+                URL.revokeObjectURL(url);
+            };
+
+            img.src = url;
+        }
+
+        function downloadIcon(size, filename) {
+            const canvas = document.getElementById(`canvas${size}`);
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+        }
+
+        async function downloadAll() {
+            // Download all three icons sequentially
+            alert('Click OK on each download prompt to save all 3 icons (icon16.png, icon48.png, icon128.png)');
+
+            setTimeout(() => downloadIcon(128, 'icon128.png'), 100);
+            setTimeout(() => downloadIcon(48, 'icon48.png'), 500);
+            setTimeout(() => downloadIcon(16, 'icon16.png'), 900);
+        }
+
+        // Render all icons on page load
+        window.onload = function() {
+            renderIcon(128);
+            renderIcon(48);
+            renderIcon(16);
+        };
+    </script>
+</body>
+</html>
