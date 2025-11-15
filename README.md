@@ -1,6 +1,6 @@
 # Video Downloader Chrome Extension
 
-Chrome extension to detect and download videos from websites.
+Chrome extension to detect and download videos from BGU.
 
 ## Installation
 
@@ -11,18 +11,13 @@ Chrome extension to detect and download videos from websites.
 
 ## Usage
 
-1. Navigate to any webpage with videos
+1. Navigate to a BGU moodel media page.
 2. Click the extension icon to see detected videos
 3. Click "Download" to save the video
-4. Download buttons also appear as overlays on video elements
 
 ## Features
 
 - Automatic video detection
-- Download button overlay on videos
-- Popup interface to view all detected videos
-- Support for direct video URLs (not blob URLs)
+- Popup interface to download the video
 
-## Note
 
-This extension can only download videos with direct URLs. Streaming videos using blob URLs or DRM protection cannot be downloaded.
